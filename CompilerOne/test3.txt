@@ -1,0 +1,7 @@
+Start$
+Include"/@ i love my self and my self love i @/
+omw$main &&
+Yesif~
+{Omw$xxx==55+55.
+Yesif$(){
+SIMww$y="c".}
