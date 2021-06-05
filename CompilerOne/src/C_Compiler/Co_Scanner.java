@@ -22,7 +22,8 @@ public class Co_Scanner {
 
     public ArrayList scan(File file) throws FileNotFoundException {
         try (Scanner input = new Scanner(file)) {
-            System.out.println("Line|Lexeme|token|matchability");
+            //System.out.println("Line|Lexeme|token|matchability");
+		label.add(new JLabel("Line|Lexeme|token|matchability"));
             while (input.hasNext()) {
                 String line = input.nextLine();
                 analyze(line);
@@ -33,7 +34,8 @@ public class Co_Scanner {
     }
     
     public ArrayList scantext(String contents) throws FileNotFoundException {
-            System.out.println("Line|Lexeme|token|matchability");
+            //System.out.println("Line|Lexeme|token|matchability");
+	    label.add(new JLabel("Line|Lexeme|token|matchability"));
             String[] liness = contents.split("\\r?\\n");
             for (String line : liness) {
                       System.out.println(line);
@@ -67,7 +69,7 @@ public class Co_Scanner {
                     word1 = String.valueOf(sentence.charAt(j + 1));
                 }
                 if (word.equals("/") && word1.equals("@")) {
-System.out.println(linenum + "  Comment :  " + word + word1 + "  Matched");
+//System.out.println(linenum + "  Comment :  " + word + word1 + "  Matched");
 label.add(new JLabel(linenum + "  Comment :  " + word + word1 + "  Matched"));
                     hold = 1;
                 }
@@ -75,7 +77,7 @@ label.add(new JLabel(linenum + "  Comment :  " + word + word1 + "  Matched"));
                     hold = 0;
                 }
                 if (word.equals("/") && word1.equals("^") && hold == 0) {
-System.out.println(linenum + "  Comment :  " + word + word1 + "  Matched");
+//System.out.println(linenum + "  Comment :  " + word + word1 + "  Matched");
 label.add(new JLabel(linenum + "  Comment :  " + word + word1 + "  Matched"));
                     hold1 = linenum;
                 }
@@ -88,20 +90,20 @@ label.add(new JLabel(linenum + "  Comment :  " + word + word1 + "  Matched"));
                     }
 
                     if (j + 1 == sentence.length() && !word.equals("")) {
-System.out.println(linenum + "   Number: " + word + "  Matched");
+//System.out.println(linenum + "   Number: " + word + "  Matched");
 label.add(new JLabel(linenum + "   Number: " + word + "  Matched"));
 
                         word = "";
                     }
                     if (j + 1 < sentence.length()) {
                         if (Character.isLetter(sentence.charAt(j + 1)) && exponent == true && !word.equals("")) {
-System.out.println(linenum + "   Number: " + word + "  Matched");
+//System.out.println(linenum + "   Number: " + word + "  Matched");
 label.add(new JLabel(linenum + "   Number: " + word + "  Matched"));
 
                             word = "";
                         }
                         if (Character.isLetterOrDigit(sentence.charAt(j + 1)) == false && !word.equals("")) {
-System.out.println(linenum + "   Number: " + word + "  Matched");
+//System.out.println(linenum + "   Number: " + word + "  Matched");
 label.add(new JLabel(linenum + "   Number: " + word + "  Matched"));
 
                             word = "";
@@ -125,14 +127,14 @@ label.add(new JLabel(linenum + "   Number: " + word + "  Matched"));
                                     for (t = 0; t < Datatypes.length; t++) {
                                         if (word.equals(Datatypes[t])) {
                                             word1 = Datatypes1[t];
-System.out.println(linenum + "   " + word1 + ": " + word + "  Matched");
+//System.out.println(linenum + "   " + word1 + ": " + word + "  Matched");
 label.add(new JLabel(linenum + "   " + word1 + ": " + word + "  Matched"));
                                             word = "";
                                             z = 1;
                                         }
                                     }
                                     if (word.length() > 0 && z == 0) {
-System.out.println(linenum + "  Identifier : " + word + "  Matched");
+//System.out.println(linenum + "  Identifier : " + word + "  Matched");
   label.add(new JLabel(linenum + "  Identifier : " + word + "  Matched"));
                                         word = "";
                                     }
@@ -145,7 +147,7 @@ System.out.println(linenum + "  Identifier : " + word + "  Matched");
                             for (t = 0; t < Datatypes.length; t++) {
                                 if (word.equals(Datatypes[t])) {
                                     word1 = Datatypes1[t];
-System.out.println(linenum + "   " + word1 + ": " + word + "  Matched");
+//System.out.println(linenum + "   " + word1 + ": " + word + "  Matched");
   label.add(new JLabel(linenum + "   " + word1 + ": " + word + "  Matched"));
 
                                     word = "";
@@ -165,7 +167,7 @@ System.out.println(linenum + "   " + word1 + ": " + word + "  Matched");
                 }
 
                 if (word.equals("'") || word.equals("\"")) {
-System.out.println(linenum + "   " + "Quotation Mark: " + word + "  Matched");
+//System.out.println(linenum + "   " + "Quotation Mark: " + word + "  Matched");
 label.add(new JLabel(linenum + "   " + "Quotation Mark: " + word + "  Matched"));
 
                     word = "";
@@ -182,17 +184,17 @@ label.add(new JLabel(linenum + "   " + "Quotation Mark: " + word + "  Matched"))
                             for (String geq : rOperator) {
                                 if (word.equals(geq)) {
                                     if (word1.equals("=")) {
-System.out.println(linenum + "  " + "relational operators: " + word + word1 + "  Matched");
+//System.out.println(linenum + "  " + "relational operators: " + word + word1 + "  Matched");
 label.add(new JLabel(linenum + "  " + "relational operators: " + word + word1 + "  Matched"));
                                         word = "";
                                         word1 = "";
                                         j++;
                                     } else if (word.equals("=")) {
-System.out.println(linenum + "   " + "Assign :" + word + "  Matched");
+//System.out.println(linenum + "   " + "Assign :" + word + "  Matched");
 label.add(new JLabel(linenum + "   " + "Assign: " + word + "  Matched"));
                                         word = "";
                                     } else {
-System.out.println(linenum + "  " + "relational operators: " + word + "  Matched");
+//System.out.println(linenum + "  " + "relational operators: " + word + "  Matched");
 label.add(new JLabel(linenum + "   " + "relational operators : " + word + "  Matched"));
 
                                         word = "";
@@ -202,19 +204,19 @@ label.add(new JLabel(linenum + "   " + "relational operators : " + word + "  Mat
 
                             if (word.equals("&") && word1.equals("&") || word.equals("|") && word1.equals("|")) {
 
-System.out.println(linenum + "  " + "Logic operator: " + word + word1 + "  Matched");
+//System.out.println(linenum + "  " + "Logic operator: " + word + word1 + "  Matched");
 label.add(new JLabel(linenum + "   " + "Logic operator: " + word + word1 +"  Matched"));
 
                                 word = "";
                                 word1 = "";
                                 j++;
                             } else if (word.equals("~")) {
-System.out.println(linenum + "   " + "Logic operator :" + word + "  Matched");
+//System.out.println(linenum + "   " + "Logic operator :" + word + "  Matched");
 label.add(new JLabel(linenum + "   " + "Logic operator: " + word +"  Matched"));
                                 word = "";
                             }
                             if (word.equals("-") && word1.equals(">")) {
-System.out.println(linenum + "   Access Operator :" + word + word1 + "  Matched");
+//System.out.println(linenum + "   Access Operator :" + word + word1 + "  Matched");
 label.add(new JLabel(linenum + "   " + "Access Operator: " + word + word1 +"  Matched"));
 
                                 word = "";
@@ -222,7 +224,7 @@ label.add(new JLabel(linenum + "   " + "Access Operator: " + word + word1 +"  Ma
 
                             for (String b : braces) {
                                 if (word.equals(b)) {
-System.out.println(linenum + "  " + "Braces :" + word + "  Matched");
+//System.out.println(linenum + "  " + "Braces :" + word + "  Matched");
 label.add(new JLabel(linenum + "  " + "Braces :" + word + "  Matched"));
 
                                     word = "";
@@ -230,13 +232,13 @@ label.add(new JLabel(linenum + "  " + "Braces :" + word + "  Matched"));
                             }
 
                             if (word.equals(".")) {
-System.out.println(linenum + "   line delimiter :" + word + "  Matched");
+//System.out.println(linenum + "   line delimiter :" + word + "  Matched");
 label.add(new JLabel(linenum + "  " + "line delimiter  :" + word + "  Matched"));
 
                                 word = "";
                             }
                             if (word.equals("$")) {
-System.out.println(linenum + "   token delimiter :" + word + "  Matched");
+//System.out.println(linenum + "   token delimiter :" + word + "  Matched");
 label.add(new JLabel(linenum + "  " + "token delimiter  :" + word + "  Matched"));
 
                                 word = "";
@@ -246,7 +248,7 @@ label.add(new JLabel(linenum + "  " + "token delimiter  :" + word + "  Matched")
                         if (word.length() == 1) {
                             for (String operator : operators) {
                                 if (word.equals(operator)) {
-                                    System.out.println(linenum + "   Operator: " + word + "  Matched");
+                                    //System.out.println(linenum + "   Operator: " + word + "  Matched");
                                     label.add(new JLabel(linenum + "  " + "Operator :" + word + "  Matched"));
 
                                     word = "";
