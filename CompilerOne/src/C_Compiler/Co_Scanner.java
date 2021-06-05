@@ -274,6 +274,7 @@ label.add(new JLabel(linenum + "  " + "token delimiter  :" + word + "  Matched")
         	panel.add(l); 
         }
         frame.add(panel);  
+	    frame.setSize(500, 800);
         frame.setLocationRelativeTo(null);  
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
         frame.setVisible(true);      	
