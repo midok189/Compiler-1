@@ -82,10 +82,11 @@ public class C_Compiler {
                java.io.File f = file.getSelectedFile();
                Co_Scanner myScanne2r = new Co_Scanner();
    	             File myFile = new File(f.getPath());
-					myScanner.view_data();
+				
 
    	             try {
 					myScanne2r.scan(myFile);
+			                myScanne2r.view_data();
 				} catch (FileNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
