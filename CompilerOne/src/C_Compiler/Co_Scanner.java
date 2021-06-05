@@ -12,18 +12,28 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class Co_Scanner {
-	static int index = 0;
-	String[][] Mydata = new String[5][];
+
+    static int index = 0;
+    String[][] Mydata = new String[5][];
     ArrayList<Integer> lines = new ArrayList<Integer>();
-    ArrayList<JLabel> label = new ArrayList<JLabel>();
     int linenum = 1, t = 0, z = 0, hold = 0, hold1;
+    JTable jt = new JTable();
+    DefaultTableModel tableModel;
+    Object[] row;
+
+    public Co_Scanner() {
+        String column[] = {"Line", "Lexeme", "token", "matchability"};
+        tableModel = new DefaultTableModel(column, 0);
+        jt.setModel(tableModel);
+    }
 
     public ArrayList scan(File file) throws FileNotFoundException {
         try (Scanner input = new Scanner(file)) {
-            //System.out.println("Line|Lexeme|token|matchability");
-		label.add(new JLabel("Line|Lexeme|token|matchability"));
             while (input.hasNext()) {
                 String line = input.nextLine();
                 analyze(line);
@@ -32,20 +42,17 @@ public class Co_Scanner {
         }
         return lines;
     }
-    
+
     public ArrayList scantext(String contents) throws FileNotFoundException {
-            //System.out.println("Line|Lexeme|token|matchability");
-	    label.add(new JLabel("Line|Lexeme|token|matchability"));
-            String[] liness = contents.split("\\r?\\n");
-            for (String line : liness) {
-                      System.out.println(line);
-                analyze(line);
-                linenum += 1;
-            }
+        String[] liness = contents.split("\\r?\\n");
+        for (String line : liness) {
+            System.out.println(line);
+            analyze(line);
+            linenum += 1;
+        }
         return lines;
     }
-    
-    
+
     public void analyze(String line) {
         String[] Datatypes = {"Omw", "SIMww", "Chji", "Seriestl", "IMwf", "SIMwf", "NOReturn", "Loli", "Yesif", "Otherwise", "main", "RepeatWhen", "Reiterate", "GetBack", "OutLoop", "Start", "Last", "Include"};
         String[] Datatypes1 = {"Integer", "signed Integer", "char", "String", "Float", "signed Float", "void", "struct", "Condition", "Condition", "main function", "Loop", "Loop", "Return", "Break", "Start", "End", "inclusion"};
@@ -69,16 +76,16 @@ public class Co_Scanner {
                     word1 = String.valueOf(sentence.charAt(j + 1));
                 }
                 if (word.equals("/") && word1.equals("@")) {
-//System.out.println(linenum + "  Comment :  " + word + word1 + "  Matched");
-label.add(new JLabel(linenum + "  Comment :  " + word + word1 + "  Matched"));
+                    row = new Object[]{String.valueOf(linenum), "Comment", word + word1, "Matched"};
+                    tableModel.addRow(row);
                     hold = 1;
                 }
                 if (word.equals("@")) {
                     hold = 0;
                 }
                 if (word.equals("/") && word1.equals("^") && hold == 0) {
-//System.out.println(linenum + "  Comment :  " + word + word1 + "  Matched");
-label.add(new JLabel(linenum + "  Comment :  " + word + word1 + "  Matched"));
+                    row = new Object[]{String.valueOf(linenum), "Comment", word + word1, "Matched"};
+                    tableModel.addRow(row);
                     hold1 = linenum;
                 }
 
@@ -90,22 +97,19 @@ label.add(new JLabel(linenum + "  Comment :  " + word + word1 + "  Matched"));
                     }
 
                     if (j + 1 == sentence.length() && !word.equals("")) {
-//System.out.println(linenum + "   Number: " + word + "  Matched");
-label.add(new JLabel(linenum + "   Number: " + word + "  Matched"));
-
+                        row = new Object[]{String.valueOf(linenum), "Number", word, "Matched"};
+                        tableModel.addRow(row);
                         word = "";
                     }
                     if (j + 1 < sentence.length()) {
                         if (Character.isLetter(sentence.charAt(j + 1)) && exponent == true && !word.equals("")) {
-//System.out.println(linenum + "   Number: " + word + "  Matched");
-label.add(new JLabel(linenum + "   Number: " + word + "  Matched"));
-
+                            row = new Object[]{String.valueOf(linenum), "Number", word, "Matched"};
+                            tableModel.addRow(row);
                             word = "";
                         }
                         if (Character.isLetterOrDigit(sentence.charAt(j + 1)) == false && !word.equals("")) {
-//System.out.println(linenum + "   Number: " + word + "  Matched");
-label.add(new JLabel(linenum + "   Number: " + word + "  Matched"));
-
+                            row = new Object[]{String.valueOf(linenum), "Number", word, "Matched"};
+                            tableModel.addRow(row);
                             word = "";
                         }
                     }
@@ -127,15 +131,15 @@ label.add(new JLabel(linenum + "   Number: " + word + "  Matched"));
                                     for (t = 0; t < Datatypes.length; t++) {
                                         if (word.equals(Datatypes[t])) {
                                             word1 = Datatypes1[t];
-//System.out.println(linenum + "   " + word1 + ": " + word + "  Matched");
-label.add(new JLabel(linenum + "   " + word1 + ": " + word + "  Matched"));
+                                            row = new Object[]{String.valueOf(linenum), word1, word, "Matched"};
+                                            tableModel.addRow(row);
                                             word = "";
                                             z = 1;
                                         }
                                     }
                                     if (word.length() > 0 && z == 0) {
-//System.out.println(linenum + "  Identifier : " + word + "  Matched");
-  label.add(new JLabel(linenum + "  Identifier : " + word + "  Matched"));
+                                        row = new Object[]{String.valueOf(linenum), "Identifier", word, "Matched"};
+                                        tableModel.addRow(row);
                                         word = "";
                                     }
                                 }
@@ -147,9 +151,8 @@ label.add(new JLabel(linenum + "   " + word1 + ": " + word + "  Matched"));
                             for (t = 0; t < Datatypes.length; t++) {
                                 if (word.equals(Datatypes[t])) {
                                     word1 = Datatypes1[t];
-//System.out.println(linenum + "   " + word1 + ": " + word + "  Matched");
-  label.add(new JLabel(linenum + "   " + word1 + ": " + word + "  Matched"));
-
+                                    row = new Object[]{String.valueOf(linenum), word1, word, "Matched"};
+                                    tableModel.addRow(row);
                                     word = "";
                                     t = 0;
                                 } else {
@@ -167,9 +170,8 @@ label.add(new JLabel(linenum + "   " + word1 + ": " + word + "  Matched"));
                 }
 
                 if (word.equals("'") || word.equals("\"")) {
-//System.out.println(linenum + "   " + "Quotation Mark: " + word + "  Matched");
-label.add(new JLabel(linenum + "   " + "Quotation Mark: " + word + "  Matched"));
-
+                    row = new Object[]{String.valueOf(linenum), "Quotation Mark", word, "Matched"};
+                    tableModel.addRow(row);
                     word = "";
                 }
 
@@ -184,63 +186,56 @@ label.add(new JLabel(linenum + "   " + "Quotation Mark: " + word + "  Matched"))
                             for (String geq : rOperator) {
                                 if (word.equals(geq)) {
                                     if (word1.equals("=")) {
-//System.out.println(linenum + "  " + "relational operators: " + word + word1 + "  Matched");
-label.add(new JLabel(linenum + "  " + "relational operators: " + word + word1 + "  Matched"));
+                                        row = new Object[]{String.valueOf(linenum), "Relational operators", word + word1, "Matched"};
+                                        tableModel.addRow(row);
                                         word = "";
                                         word1 = "";
                                         j++;
                                     } else if (word.equals("=")) {
-//System.out.println(linenum + "   " + "Assign :" + word + "  Matched");
-label.add(new JLabel(linenum + "   " + "Assign: " + word + "  Matched"));
+                                        row = new Object[]{String.valueOf(linenum), "Assign", word, "Matched"};
+                                        tableModel.addRow(row);
                                         word = "";
                                     } else {
-//System.out.println(linenum + "  " + "relational operators: " + word + "  Matched");
-label.add(new JLabel(linenum + "   " + "relational operators : " + word + "  Matched"));
-
+                                        row = new Object[]{String.valueOf(linenum), "Relational operators", word, "Matched"};
+                                        tableModel.addRow(row);
                                         word = "";
                                     }
                                 }
                             }
 
                             if (word.equals("&") && word1.equals("&") || word.equals("|") && word1.equals("|")) {
-
-//System.out.println(linenum + "  " + "Logic operator: " + word + word1 + "  Matched");
-label.add(new JLabel(linenum + "   " + "Logic operator: " + word + word1 +"  Matched"));
-
+                                row = new Object[]{String.valueOf(linenum), "Logic operator", word + word1, "Matched"};
+                                tableModel.addRow(row);
                                 word = "";
                                 word1 = "";
                                 j++;
                             } else if (word.equals("~")) {
-//System.out.println(linenum + "   " + "Logic operator :" + word + "  Matched");
-label.add(new JLabel(linenum + "   " + "Logic operator: " + word +"  Matched"));
+                                row = new Object[]{String.valueOf(linenum), "Logic operator", word, "Matched"};
+                                tableModel.addRow(row);
                                 word = "";
                             }
                             if (word.equals("-") && word1.equals(">")) {
-//System.out.println(linenum + "   Access Operator :" + word + word1 + "  Matched");
-label.add(new JLabel(linenum + "   " + "Access Operator: " + word + word1 +"  Matched"));
-
+                                row = new Object[]{String.valueOf(linenum), "Access Operator", word + word1, "Matched"};
+                                tableModel.addRow(row);
                                 word = "";
                             }
 
                             for (String b : braces) {
                                 if (word.equals(b)) {
-//System.out.println(linenum + "  " + "Braces :" + word + "  Matched");
-label.add(new JLabel(linenum + "  " + "Braces :" + word + "  Matched"));
-
+                                    row = new Object[]{String.valueOf(linenum), "Braces", word, "Matched"};
+                                    tableModel.addRow(row);
                                     word = "";
                                 }
                             }
 
                             if (word.equals(".")) {
-//System.out.println(linenum + "   line delimiter :" + word + "  Matched");
-label.add(new JLabel(linenum + "  " + "line delimiter  :" + word + "  Matched"));
-
+                                row = new Object[]{String.valueOf(linenum), "line delimiter", word, "Matched"};
+                                tableModel.addRow(row);
                                 word = "";
                             }
                             if (word.equals("$")) {
-//System.out.println(linenum + "   token delimiter :" + word + "  Matched");
-label.add(new JLabel(linenum + "  " + "token delimiter  :" + word + "  Matched"));
-
+                                row = new Object[]{String.valueOf(linenum), "token delimiter", word, "Matched"};
+                                tableModel.addRow(row);
                                 word = "";
                             }
                         }
@@ -248,9 +243,8 @@ label.add(new JLabel(linenum + "  " + "token delimiter  :" + word + "  Matched")
                         if (word.length() == 1) {
                             for (String operator : operators) {
                                 if (word.equals(operator)) {
-                                    //System.out.println(linenum + "   Operator: " + word + "  Matched");
-                                    label.add(new JLabel(linenum + "  " + "Operator :" + word + "  Matched"));
-
+                                    row = new Object[]{String.valueOf(linenum), "Operator", word, "Matched"};
+                                    tableModel.addRow(row);
                                     word = "";
                                 }
                             }
@@ -263,23 +257,22 @@ label.add(new JLabel(linenum + "  " + "token delimiter  :" + word + "  Matched")
         }
     }
 
-    public void view_data() 
-    {
-        JFrame frame = new JFrame("JFrame Example");  
+    public void view_data() {
+        JFrame frame = new JFrame("JFrame Example");
 
         JPanel panel = new JPanel();
         BoxLayout boxlayout = new BoxLayout(panel, BoxLayout.Y_AXIS);
         panel.setLayout(boxlayout);
-        for (JLabel l : label) {
-        	panel.add(l); 
-        }
-        frame.add(panel);  
-	    frame.setSize(500, 800);
-        frame.setLocationRelativeTo(null);  
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
-        frame.setVisible(true);      	
-    	
+
+        JScrollPane sp = new JScrollPane(jt);
+        panel.add(sp);
+
+        frame.add(panel);
+        frame.setSize(500, 800);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+
     }
 
-    
 }
